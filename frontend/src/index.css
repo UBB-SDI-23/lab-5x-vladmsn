@@ -1,0 +1,45 @@
+main {
+  min-height: 80vh;
+}
+
+h4 {
+  padding: 1rem 0;
+}
+
+.card-link {
+  text-decoration: none;
+}
+
+.card-arrow {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card-arrow.show {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  opacity: 1;
+}
+
+.user-icon {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  line-height: 36px;
+  font-weight: bold;
+}
+
+.user-icon-inner {
+  margin-bottom: 4px;
+}
+
+.initials {
+  display: block;
+  font-size: 16px;
+}

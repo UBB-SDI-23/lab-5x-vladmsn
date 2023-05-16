@@ -1,0 +1,12 @@
+server:
+  port: 1292
+
+spring:
+  datasource:
+    url: jdbc:tc:mysql:8.0.28:////expense-tracker?useMysqlMetadata=true&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: root
+    password: root
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  flyway:
+    schemas:
+      - expense-tracker

@@ -1,0 +1,11 @@
+-- creates the group table
+
+CREATE TABLE IF NOT EXISTS `lists` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `list_name` VARCHAR(256) NOT NULL,
+    `description` VARCHAR(256) NOT NULL,
+    `preferred_currency` VARCHAR(3) NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);

@@ -1,0 +1,18 @@
+# Ignore node_modules directory
+frontend/node_modules
+
+# Ignore build directory
+frontend/build
+server/target
+
+# Ignore .env file
+frontend/.env
+server/.env
+
+# Ignore junk files of react project
+frontend/.DS_Store
+frontend/.vscode
+
+server/.idea
+server/.gcloudignore
+server/.app.yaml
