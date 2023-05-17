@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from "../axios";
 
 import { Link, useParams } from 'react-router-dom';
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button} from 'react-bootstrap';
 import ListGroup from "react-bootstrap/ListGroup";
 import Expense from '../components/Expense';
 
@@ -59,7 +59,14 @@ function GroupExpensesScreen() {
           </Col>
         </Row>
       <Row>
-        <h3>Expenses</h3>
+      <Row className="justify-content-center">
+        <Col xs={12} md={8} lg={6}>
+          <h1>Expenses</h1>
+        </Col>
+        <Col xs={12} md={4} lg={6} className="d-flex justify-content-end">
+          <Button variant="primary" href="/expense/create"> + </Button>
+        </Col>
+      </Row>
         <div className="d-flex justify-content-center">
             <ListGroup className="w-100">
             {groupExpenses.map((expense) => (

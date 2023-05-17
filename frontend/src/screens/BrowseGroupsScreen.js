@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Group from "../components/Group";
-import axios from "axios";
+import axios from "../axios";
 import ListGroup from "react-bootstrap/ListGroup";
 
 const BrowseGroupsScreen = () => {

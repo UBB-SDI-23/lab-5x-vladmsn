@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from "../axios";
 import { Container, Row, Col, Button, ListGroup } from 'react-bootstrap';
 
 import { useParams } from 'react-router-dom';

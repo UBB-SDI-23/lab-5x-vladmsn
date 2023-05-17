@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../axios";
 
 import ListGroup from "react-bootstrap/ListGroup";
 import GroupUserInfo from '../components/GroupUserInfo';

@@ -45,7 +45,7 @@ public class UserController {
         return new ResponseEntity<>(expenseTrackerService.getUserGroupDetails(id), HttpStatus.OK);
     }
 
-    @Operation(summary = "Get user by id with detailed expenses by group id")
+    @Operation(summary = "Get user by id with detailed expenses by user id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User found"),
             @ApiResponse(responseCode = "404", description = "User not found")

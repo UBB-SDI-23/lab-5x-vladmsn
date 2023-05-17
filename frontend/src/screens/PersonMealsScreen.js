@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ListGroup, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Meal from "../components/Meal";
-import axios from "axios";
+import axios from "../axios";
 import { useParams } from "react-router-dom";
 
 const PersonMealsScreen = () => {
