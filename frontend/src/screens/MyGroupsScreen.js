@@ -4,26 +4,50 @@ import axios from "../axios";
 
 import ListGroup from "react-bootstrap/ListGroup";
 import GroupUserInfo from '../components/GroupUserInfo';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, ButtonGroup, FormControl } from 'react-bootstrap';
 
 const MyGroupsScreen = () => {
 
   const [userGroups, setUserGroups] = useState([]);
   const userId = 5;
 
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const size = 5; 
+
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const { data } = await axios.get(`/api/v1/groups/user/${userId}`);
+        const { data } = await axios.get(`/api/v1/groups/user/${userId}?page=${page}&size=${size}`);
       
-        setUserGroups(data);
+        setTotalPages(data.totalPages);
+        setUserGroups(data.content);
       } catch (error) {
         console.log(error);
       }
     };
 
       fetchGroups();
-    }, []);
+    }, [page, size]);
+  
+  const handleNextPage = () => {
+    if (page < totalPages - 1) {
+      setPage(prevPage => prevPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (page > 0) {
+      setPage(prevPage => prevPage - 1);
+    }
+  };
+
+  const handlePageChange = (event) => {
+    const newPage = Number(event.target.value);
+    if (newPage >= 0 && newPage < totalPages) {
+      setPage(newPage);
+    }
+  };
 
   return (
     <>
@@ -44,6 +68,23 @@ const MyGroupsScreen = () => {
             </ListGroup.Item>
           ))}
         </ListGroup>
+      </div>
+
+      <div className="d-flex justify-content-center">
+        <ButtonGroup>
+          <Button onClick={handlePreviousPage} disabled={page === 0}>
+            Previous
+          </Button>
+          <FormControl
+            type="number"
+            value={page+1}
+            onChange={handlePageChange}
+            style={{ width: '100px' }}
+          />
+          <Button onClick={handleNextPage} disabled={page === totalPages - 1}>
+            Next
+          </Button>
+        </ButtonGroup>
       </div>
     </>
   )

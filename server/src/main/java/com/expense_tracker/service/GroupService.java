@@ -12,17 +12,17 @@ import com.expense_tracker.model.util.GroupConverter;
 import com.expense_tracker.repository.GroupRepository;
 import com.expense_tracker.repository.GroupUserRepository;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Locale;
+
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+
 
 @Slf4j
 @Service
@@ -34,26 +34,20 @@ public class GroupService {
     private final ExpenseService expenseService;
 
     @Transactional(readOnly = true)
-    public List<Group> getAllGroups() {
-        return groupRepository.findAll().stream()
-                .map(GroupConverter::convertToGroup)
-                .peek(group -> group.setParticipants(getParticipantsByGroupId(group.getId())))
-                .toList();
+    public Page<Group> getAllGroups(Pageable pageable) {
+        return groupRepository.findAll(pageable)
+                .map(groupEntity -> GroupConverter.convertToGroup(groupEntity, getParticipantsByGroupId(groupEntity.getId())));
     }
 
     @Transactional(readOnly = true)
     public Group getGroupById(Integer id) {
-        Group group = GroupConverter.convertToGroup(groupRepository.findById(id)
-                .orElseThrow(() -> new JpaEntityNotFoundException("Group with id: " + id + " not found")));
-        group.setParticipants(getParticipantsByGroupId(id));
-
-        return group;
+        return GroupConverter.convertToGroup(groupRepository.findById(id)
+                .orElseThrow(() -> new JpaEntityNotFoundException("Group with id: " + id + " not found")), getParticipantsByGroupId(id));
     }
 
     @Transactional(readOnly = true)
-    public List<GroupWithBalance> getGroupsByUserId(Integer userId) {
-        return groupUserRepository.findAll().stream()
-                .filter(groupUserEntity -> groupUserEntity.getPk().getUserId().equals(userId))
+    public Page<GroupWithBalance> getGroupsByUserId(Integer userId, Pageable pageable) {
+        return groupUserRepository.findAllByPk_UserId(userId, pageable)
                 .map(groupUserEntity -> groupRepository.findById(groupUserEntity.getPk().getGroupId())
                     .orElseThrow(() -> new JpaEntityNotFoundException("Group with id: " + groupUserEntity.getPk().getGroupId() + " not found")))
                 .map(groupEntity -> {
@@ -81,8 +75,7 @@ public class GroupService {
                             .joinedAt(joinedAt)
                             .balance(totalSpent-totalOwed)
                             .build();
-                })
-                .toList();
+                });
     }
 
     @Transactional
@@ -108,9 +101,9 @@ public class GroupService {
     }
 
     private Set<User> getParticipantsByGroupId(Integer id) {
-        return StreamSupport.stream(groupUserRepository.findAll().spliterator(), false)
-                .filter(groupUserEntity -> groupUserEntity.getPk().getGroupId().equals(id))
+        return groupUserRepository.findAllByPk_GroupId(id, Pageable.unpaged())
                 .map(groupUserEntity -> userService.getById(groupUserEntity.getPk().getUserId()))
+                .stream()
                 .collect(Collectors.toSet());
     }
 

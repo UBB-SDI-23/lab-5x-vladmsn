@@ -12,6 +12,11 @@ const CreateGroupScreen = () => {
     };
   
     const handleDescriptionChange = (e) => {
+      if (e.target.value.length === 0) {
+        
+        setDescription("No description provided");
+        return;
+      }
       setDescription(e.target.value);
     };
   

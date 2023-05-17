@@ -10,11 +10,12 @@ import java.util.Set;
 
 @UtilityClass
 public class GroupConverter {
-    public static Group convertToGroup(GroupEntity groupEntity) {
+    public static Group convertToGroup(GroupEntity groupEntity, Set<User> participants) {
         return Group.builder()
                 .id(groupEntity.getId())
                 .name(groupEntity.getName())
                 .description(groupEntity.getDescription())
+                .participants(participants)
                 .currency(groupEntity.getPreferredCurrency())
                 .build();
     }

@@ -28,9 +28,9 @@ public class ExpenseTrackerService {
     private final UserService userService;
 
     @Transactional(readOnly = true)
-    public UserExpenses getUserExpensesByGroup(Integer userId, Integer groupId) {
+    public UserExpenses getUserExpensesByGroup(Integer userId, Integer groupId, Pageable pageable) {
         User user = userService.getById(userId);
-        List<Expense> expenses = expenseService.getByPayerId(userId)
+        List<Expense> expenses = expenseService.getByPayerId(userId, pageable)
                 .stream()
                 .filter(expenseEntity -> {
                     if (groupId == null) {
@@ -64,9 +64,10 @@ public class ExpenseTrackerService {
         return ExpenseConverter.convertToExpenseDetails(expenseEntity, payer, participants_amount);
     }
 
+    // #TODO: FIX THIS
     @Transactional(readOnly = true)
-    public List<UserGroupDetails> getUserGroupDetails(Integer group_id) {
-        List<User> users = userService.getAll(Pageable.unpaged());
+    public List<UserGroupDetails> getUserGroupDetails(Integer group_id, Pageable pageable) {
+        List<User> users = userService.getAll(Pageable.unpaged()).getContent();
 
         return users.stream()
                 .map(user -> {
@@ -118,7 +119,7 @@ public class ExpenseTrackerService {
 
     public GroupExpenseSummary getTotalExpenseSummary(Integer groupId) {
 
-        Double totalSpent = expenseService.getByGroupId(groupId, null).stream()
+        Double totalSpent = expenseService.getByGroupId(groupId, null, Pageable.unpaged()).stream()
                 .mapToDouble(Expense::getAmount)
                 .sum();
 

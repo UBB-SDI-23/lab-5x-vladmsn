@@ -9,15 +9,13 @@ import com.expense_tracker.model.db.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
@@ -27,11 +25,9 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
-    public List<User> getAll(Pageable pageable) {
-        return StreamSupport
-                .stream(userRepository.findAll(pageable).spliterator(), false)
-                .map(UserConverter::convertToUser)
-                .collect(Collectors.toList());
+    public Page<User> getAll(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(UserConverter::convertToUser);
     }
 
     @Transactional(readOnly = true)

@@ -12,6 +12,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +38,8 @@ public class ExpenseController {
     @Operation(summary = "Get all expenses")
     @ApiResponse(responseCode = "200", description = "expenses found")
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Iterable<Expense>> getAll() {
-        return new ResponseEntity<>(expenseService.getAll(), HttpStatus.OK);
+    public ResponseEntity<Page<Expense>> getAll(@PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(expenseService.getAll(pageable), HttpStatus.OK);
     }
 
     @Operation(summary = "Get detailed expense by id")
@@ -55,8 +58,8 @@ public class ExpenseController {
         @ApiResponse(responseCode = "404", description = "expenses not found")
     })
     @RequestMapping(value = "/group/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Iterable<Expense>> getByGroupId(@PathVariable Integer id, @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateAfter) {
-        return new ResponseEntity<>(expenseService.getByGroupId(id, dateAfter), HttpStatus.OK);
+    public ResponseEntity<Page<Expense>> getByGroupId(@PathVariable Integer id, @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateAfter, @PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(expenseService.getByGroupId(id, dateAfter, pageable), HttpStatus.OK);
     }
 
     @Operation(summary = "Get expenses by payer id")
@@ -65,8 +68,8 @@ public class ExpenseController {
         @ApiResponse(responseCode = "404", description = "expenses not found")
     })
     @RequestMapping(value = "/payer/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Iterable<Expense>> getByPayerId(@PathVariable Integer id) {
-        return new ResponseEntity<>(expenseService.getByPayerId(id), HttpStatus.OK);
+    public ResponseEntity<Iterable<Expense>> getByPayerId(@PathVariable Integer id, @PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(expenseService.getByPayerId(id, pageable), HttpStatus.OK);
     }
 
     @Operation(summary = "Create expense")

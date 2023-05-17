@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,8 +28,8 @@ public class BankAccountController {
     @Operation(summary = "Get all bank accounts")
     @ApiResponse(responseCode = "200", description = "Bank account found")
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Iterable<BankAccount>> getAll() {
-        return new ResponseEntity<>(bankAccountService.getAll(), HttpStatus.OK);
+    public ResponseEntity<Iterable<BankAccount>> getAll(@PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(bankAccountService.getAll(pageable), HttpStatus.OK);
     }
 
     @Operation(summary = "Get bank account by id")

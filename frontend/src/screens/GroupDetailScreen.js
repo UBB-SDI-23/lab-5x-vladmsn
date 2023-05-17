@@ -19,8 +19,7 @@ const GroupDetailScreen = ({ match }) => {
         const response = await axios.get(`/api/v1/groups/${id}`);
         setGroup(response.data);
 
-       (response.data.participants.find(participant => participant.id === userId)) ? setIsParticipant(true) 
-                                                                                    : setIsParticipant(false);
+       (response.data.participants.find(participant => participant.id === userId)) ? setIsParticipant(true) : setIsParticipant(false);
 
       } catch (error) {
         console.log(error);

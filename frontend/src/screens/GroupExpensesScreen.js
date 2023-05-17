@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from "../axios";
 
 import { Link, useParams } from 'react-router-dom';
-import { Container, Row, Col, Card, Button} from 'react-bootstrap';
+import { Container, Row, Col, Card, Button,  ButtonGroup, FormControl} from 'react-bootstrap';
 import ListGroup from "react-bootstrap/ListGroup";
 import Expense from '../components/Expense';
 
@@ -12,19 +12,43 @@ function GroupExpensesScreen() {
     const [groupExpenses , setGroupExpenses] = useState([])
     const { id } = useParams();
 
+    const [page, setPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const size = 5; 
+
     useEffect(() => {
         const fetchExpenses = async () => {
           try {
-            const { data } = await axios.get(`/api/v1/expenses/group/${id}`);
+            const { data } = await axios.get(`/api/v1/expenses/group/${id}?page=${page}&size=${size}`);
           
-            setGroupExpenses(data);
+            setTotalPages(data.totalPages);
+            setGroupExpenses(data.content);
           } catch (error) {
             console.log(error);
           }
         };
     
         fetchExpenses();
-        }, []);
+        }, [page, size]);
+
+  const handleNextPage = () => {
+    if (page < totalPages - 1) {
+      setPage(prevPage => prevPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (page > 0) {
+      setPage(prevPage => prevPage - 1);
+    }
+  };
+
+  const handlePageChange = (event) => {
+    const newPage = Number(event.target.value);
+    if (newPage >= 0 && newPage < totalPages) {
+      setPage(newPage);
+    }
+  };
     
     return (
       <Container>
@@ -77,6 +101,22 @@ function GroupExpensesScreen() {
             </ListGroup>
         </div>
       </Row>
+      <div className="d-flex justify-content-center">
+        <ButtonGroup>
+          <Button onClick={handlePreviousPage} disabled={page === 0}>
+            Previous
+          </Button>
+          <FormControl
+            type="number"
+            value={page+1}
+            onChange={handlePageChange}
+            style={{ width: '100px' }}
+          />
+          <Button onClick={handleNextPage} disabled={page === totalPages - 1}>
+            Next
+          </Button>
+        </ButtonGroup>
+      </div>
       </Container>
     );
 }

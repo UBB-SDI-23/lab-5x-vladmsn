@@ -10,6 +10,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +29,8 @@ public class GroupController {
     @Operation(summary = "Get all groups")
     @ApiResponse(responseCode = "200", description = "Groups found")
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Iterable<Group>> getAll() {
-        return new ResponseEntity<>(groupService.getAllGroups(), HttpStatus.OK);
+    public ResponseEntity<Iterable<Group>> getAll(@PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(groupService.getAllGroups(pageable), HttpStatus.OK);
     }
 
     @Operation(summary = "Get group by id")
@@ -56,8 +59,8 @@ public class GroupController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @RequestMapping(value = "/user/{user_id}", method = RequestMethod.GET)
-    public ResponseEntity<List<GroupWithBalance>> getAllByUserId(@PathVariable Integer user_id) {
-        return new ResponseEntity<>(groupService.getGroupsByUserId(user_id), HttpStatus.OK);
+    public ResponseEntity<Page<GroupWithBalance>> getAllByUserId(@PathVariable Integer user_id, @PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(groupService.getGroupsByUserId(user_id, pageable), HttpStatus.OK);
     }
 
     @Operation(summary = "Create group")

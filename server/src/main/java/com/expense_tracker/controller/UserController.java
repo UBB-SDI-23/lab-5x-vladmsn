@@ -34,15 +34,15 @@ public class UserController {
     @Operation(summary = "Get all users")
     @ApiResponse(responseCode = "200", description = "Users found")
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Iterable<User>> getAll(@PageableDefault() Pageable pageable) {
+    public ResponseEntity<Iterable<User>> getAll(@PageableDefault Pageable pageable) {
         return new ResponseEntity<>(userService.getAll(pageable), HttpStatus.OK);
     }
 
-    @Operation(summary = "Get all users with group details, by group id, sorted by balance")
+    @Operation(summary = "Get all users with group details, by group id")
     @ApiResponse(responseCode = "200", description = "Users found")
     @RequestMapping(value = "/group_details/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Iterable<UserGroupDetails>> getAllByGroupId(@PathVariable Integer id) {
-        return new ResponseEntity<>(expenseTrackerService.getUserGroupDetails(id), HttpStatus.OK);
+    public ResponseEntity<Iterable<UserGroupDetails>> getAllByGroupId(@PathVariable Integer id, @PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(expenseTrackerService.getUserGroupDetails(id, pageable), HttpStatus.OK);
     }
 
     @Operation(summary = "Get user by id with detailed expenses by user id")
@@ -51,8 +51,8 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @RequestMapping(value = "/details/{user_id}", method = RequestMethod.GET)
-    public ResponseEntity<UserExpenses> getById(@PathVariable Integer user_id, @RequestParam(required = false) Integer groupId) {
-        return new ResponseEntity<>(expenseTrackerService.getUserExpensesByGroup(user_id, groupId), HttpStatus.OK);
+    public ResponseEntity<UserExpenses> getById(@PathVariable Integer user_id, @RequestParam(required = false) Integer groupId, @PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(expenseTrackerService.getUserExpensesByGroup(user_id, groupId, pageable), HttpStatus.OK);
     }
 
     @Operation(summary = "Create user")
