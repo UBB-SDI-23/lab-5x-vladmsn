@@ -6,6 +6,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import GroupUserInfo from '../components/GroupUserInfo';
 import { AuthContext } from '../AuthContext';
 import { Button, Col, Row, ButtonGroup, FormControl } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const MyGroupsScreen = () => {
 
@@ -60,7 +61,9 @@ const MyGroupsScreen = () => {
           <h1>My Groups</h1>
         </Col>
         <Col xs={12} md={4} lg={6} className="d-flex justify-content-end">
-          <Button variant="primary" href="/groups/create">Create Group</Button>
+          <Link className="btn btn-secondary my-3" to="/groups/create">
+          Create Group
+        </Link>
         </Col>
       </Row>
       

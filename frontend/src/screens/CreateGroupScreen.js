@@ -52,6 +52,7 @@ const CreateGroupScreen = () => {
 
           console.log(groupId);
           console.log(userInfo.userId);
+          
           const response2 = await axios.post(`/api/v1/groups/participant?groupId=${groupId}&userId=${userInfo.userId}`);
 
           if (response2.status === 201) {
