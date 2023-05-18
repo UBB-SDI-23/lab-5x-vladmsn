@@ -6,6 +6,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Container, Row, Col, Card, Button,  ButtonGroup, FormControl} from 'react-bootstrap';
 import ListGroup from "react-bootstrap/ListGroup";
 import Expense from '../components/Expense';
+import { useNavigate } from 'react-router-dom';
 
 
 function GroupExpensesScreen() {
@@ -15,6 +16,7 @@ function GroupExpensesScreen() {
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const size = 5; 
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchExpenses = async () => {
@@ -88,7 +90,7 @@ function GroupExpensesScreen() {
           <h1>Expenses</h1>
         </Col>
         <Col xs={12} md={4} lg={6} className="d-flex justify-content-end">
-          <Button variant="primary" href="/expense/create"> + </Button>
+          <Button variant="primary" onClick={() => navigate(`/group/${id}/expense/create`)}> + </Button>
         </Col>
       </Row>
         <div className="d-flex justify-content-center">

@@ -4,11 +4,16 @@ import { Button, Col, Container, Form, Row, Toast, ToastContainer} from "react-b
 import { useContext } from "react";
 import { AuthContext } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const CreateGroupScreen = () => {
-    const [name, setName] = useState("");
+    const { id } = useParams();
+    const [ammount, setAmmount] = useState(0);
     const [description, setDescription] = useState("");
-    const [preferredCurrency, setPreferredCurrency] = useState("");
+    const [currency, setCurrency] = useState("");
+    const [category , setCategory] = useState("");
+    const [transactionDate, setTransactionDate] = useState("");
+    
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
     const userInfo = useContext(AuthContext).userInfo;
@@ -16,55 +21,36 @@ const CreateGroupScreen = () => {
 
     const handleToastClose = () => {
       setShowToast(false);
-      navigate("/mygroups");
-    };
-  
-    const handleNameChange = (e) => {
-      setName(e.target.value);
-    };
-  
-    const handleDescriptionChange = (e) => {
-      if (e.target.value.length === 0) {
-        
-        setDescription("No description provided");
-        return;
-      }
-      setDescription(e.target.value);
-    };
-  
-    const handleCurrencyChange = (e) => {
-      setPreferredCurrency(e.target.value);
+      navigate(-1);
     };
   
     const handleSubmit = async (e) => {
       e.preventDefault();
   
       try {
-        const response = await axios.post("/api/v1/groups", {
-            name: name,
+        const response = await axios.post("/api/v1/expenses", {
+            groupId: id,
+            payerId: userInfo.userId,
+            amount: ammount,
             description: description,
-            preferredCurrency: preferredCurrency,
-            createdAt: new Date(),
-            updatedAt: new Date()
+            currency: currency,
+            category: category,
+            transactionDate: transactionDate ? transactionDate : new Date(),
           });
 
-          const groupId = response?.data.id;
-
-          console.log(groupId);
-          console.log(userInfo.userId);
-          const response2 = await axios.post(`/api/v1/groups/participant?groupId=${groupId}&userId=${userInfo.userId}`);
-
-          if (response2.status === 201) {
-            setToastMessage("Group created successfully!");
+          if (response.status === 201) {
+            setToastMessage("Expense added successfully!");
             setShowToast(true);
           }
           else {
-            setToastMessage("Error creating group:" + response);
+            setToastMessage("Error adding expense:" + response);
             setShowToast(true);
           }
         
       } catch (error) {
-        console.error("Error creating group:", error);
+        console.error("Error adding expense:", error);
+            setToastMessage("Error adding expense:");
+            setShowToast(true);
       }
     };
   
@@ -75,29 +61,40 @@ const CreateGroupScreen = () => {
             <h1>Create Group</h1>
             <Form onSubmit={handleSubmit}>
               <Form.Group controlId="name">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter group name"
-                  value={name}
-                  onChange={handleNameChange}
-                />
-              </Form.Group>
-              <Form.Group controlId="description">
                 <Form.Label>Description</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter group description"
+                  placeholder="Enter description"
                   value={description}
-                  onChange={handleDescriptionChange}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group controlId="category">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                />
+              </Form.Group>
+              
+              <Form.Group controlId="ammount">
+                <Form.Label>Ammount</Form.Label>
+                <Form.Control
+                  type="double"
+                  placeholder="Enter ammount"
+                  value={ammount}
+                  onChange={(e) => setAmmount(e.target.value)}
                 />
               </Form.Group>
               <Form.Group controlId="currency">
                 <Form.Label>Currency</Form.Label>
                 <Form.Control
                   as="select"
-                  value={preferredCurrency}
-                  onChange={handleCurrencyChange}
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
                 >
                   <option value="">Select currency</option>
                   <option value="USD">USD</option>
@@ -105,7 +102,19 @@ const CreateGroupScreen = () => {
                   <option value="GBP">GBP</option>
                   {/* Add more currency options as needed */}
                 </Form.Control>
-              </Form.Group>
+                </Form.Group>
+              
+                <Form.Group controlId="transactionDate">
+                <Form.Label>Transaction Date</Form.Label>
+                <Form.Control
+                    type="date"
+                    placeholder="Enter transaction date"
+                    value={transactionDate}
+                    onChange={(e) => setTransactionDate(e.target.value)}
+                >
+                </Form.Control>
+                </Form.Group>
+
               <Button variant="primary" type="submit">
                 Create
               </Button>

@@ -4,9 +4,13 @@ import { Link } from "react-router-dom";
 import Meal from "../components/Meal";
 import axios from "../axios";
 import { useParams } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../AuthContext";
 
 const PersonMealsScreen = () => {
   const [mealsOBJ, setMealsOBJ] = useState({});
+  const userInfo = useContext(AuthContext).userInfo;
+
 
   const { id } = useParams();
 
