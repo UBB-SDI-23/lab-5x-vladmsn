@@ -43,7 +43,7 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Or set your front-end URL instead of "*"
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://magenta-biscotti-b122cb.netlify.app")); // Or set your front-end URL instead of "*"
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
