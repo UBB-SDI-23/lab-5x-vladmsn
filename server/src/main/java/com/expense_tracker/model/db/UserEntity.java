@@ -1,12 +1,7 @@
 package com.expense_tracker.model.db;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import com.expense_tracker.model.security.ERole;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -29,6 +24,10 @@ public class UserEntity {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private ERole role = ERole.USER_ROLE;
 
     @Column(name = "email", nullable = false)
     private String email;

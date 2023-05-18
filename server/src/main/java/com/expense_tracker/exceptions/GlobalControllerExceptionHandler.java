@@ -1,4 +1,4 @@
-package com.expense_tracker.config;
+package com.expense_tracker.exceptions;
 
 import com.expense_tracker.exceptions.DuplicateResourceException;
 import com.expense_tracker.exceptions.JpaEntityNotFoundException;

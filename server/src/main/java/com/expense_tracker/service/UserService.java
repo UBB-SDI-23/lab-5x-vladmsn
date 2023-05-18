@@ -39,10 +39,8 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User getByUsername(String username) {
-        final UserEntity user =  userRepository.findByUsername(username);
-        if (user == null) {
-            throw new JpaEntityNotFoundException("User with username: " + username + " not found");
-        }
+        final UserEntity user =  userRepository.findByUsername(username)
+                .orElseThrow(() -> new JpaEntityNotFoundException("User with username: " + username + " not found"));
 
         return UserConverter.convertToUser(user);
     }
