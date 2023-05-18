@@ -15,6 +15,7 @@ public class RegisterRequest {
     private String password;
     private String email;
     private ERole role = ERole.USER_ROLE;
+    private String preferredCurrency;
     private String lastname;
     private String firstname;
 

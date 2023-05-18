@@ -1,24 +1,28 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState, useEffect } from "react";
 import axios from "../axios";
 
 import ListGroup from "react-bootstrap/ListGroup";
 import GroupUserInfo from '../components/GroupUserInfo';
+import { AuthContext } from '../AuthContext';
 import { Button, Col, Row, ButtonGroup, FormControl } from 'react-bootstrap';
 
 const MyGroupsScreen = () => {
 
   const [userGroups, setUserGroups] = useState([]);
-  const userId = 5;
+  const userInfo = useContext(AuthContext).userInfo;
 
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const size = 5; 
 
   useEffect(() => {
+
+    console.log(userInfo);
+
     const fetchGroups = async () => {
       try {
-        const { data } = await axios.get(`/api/v1/groups/user/${userId}?page=${page}&size=${size}`);
+        const { data } = await axios.get(`/api/v1/groups/user/${userInfo.userId}?page=${page}&size=${size}`);
       
         setTotalPages(data.totalPages);
         setUserGroups(data.content);

@@ -2,7 +2,13 @@ import React from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
+import { useContext } from 'react';
+import { AuthContext } from '../AuthContext';
+
 const Header = () => {
+
+  const {isAuthenticated, logout} = useContext(AuthContext);
+
   return (
     <header>
       <Navbar bg="primary" variant="dark" expand="lg" collapseOnSelect>
@@ -17,13 +23,18 @@ const Header = () => {
                 <Nav.Link>Browse groups</Nav.Link>
               </LinkContainer>
 
+            {isAuthenticated ? (
               <LinkContainer to="/mygroups">
                 <Nav.Link>My groups</Nav.Link>
-              </LinkContainer>
+              </LinkContainer>) : null}
 
-              <LinkContainer to="/login">
-                <Nav.Link>Sign In</Nav.Link>
-              </LinkContainer>
+              {isAuthenticated ? (<LinkContainer to="/" onClick={logout}>
+                                  <Nav.Link>Logout</Nav.Link>
+                                </LinkContainer>) : (
+                                <LinkContainer to="/login">
+                                  <Nav.Link>Sign In</Nav.Link>
+                                </LinkContainer>)
+              }
             </Nav>
           </Navbar.Collapse>
         </Container>

@@ -1,5 +1,6 @@
 package com.expense_tracker.config.security.jwt;
 
+import com.expense_tracker.model.db.UserEntity;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -33,8 +34,8 @@ public class JwtUtils {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(UserDetails userDetails, UserEntity userEntity) {
+        return generateToken(new HashMap<>(), userDetails, userEntity);
     }
 
     // generates an activation code that is valid for 10 minutes
@@ -44,8 +45,11 @@ public class JwtUtils {
 
     public String generateToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails
+            UserDetails userDetails,
+            UserEntity userEntity
     ) {
+        extraClaims.put("userId", userEntity.getId());
+        extraClaims.put("role", userEntity.getRole().name());
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 

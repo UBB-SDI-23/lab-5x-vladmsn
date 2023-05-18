@@ -84,6 +84,9 @@ public class GroupService {
             throw new IllegalArgumentException("Group id must be null");
         }
 
+        group.setCreatedAt(LocalDate.now());
+        group.setUpdatedAt(LocalDate.now());
+
         return groupRepository.save(group);
     }
 

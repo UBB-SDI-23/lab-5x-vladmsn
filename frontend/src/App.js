@@ -8,25 +8,40 @@ import MyGroupsScreen from "./screens/MyGroupsScreen";
 import GroupDetailScreen from "./screens/GroupDetailScreen";
 import GroupExpensesScreen from "./screens/GroupExpensesScreen";
 import CreateGroupScreen from "./screens/CreateGroupScreen";
+import CreateExpenseScreen from "./screens/CreateExpenseScreen";
+import SignupScreen from "./screens/SignupScreen";
+import LoginScreen from "./screens/LoginScreen";
+
+import { useState, useEffect } from "react";
+import { AuthProvider } from "./AuthProvider";
 
 const App = () => {
+
   return (
-    <Router>
-      <Header />
-      <main className="py-3">
-        <Container>
-          <Routes>
-            <Route path="/" element={<BrowseGroupsScreen />} exact />
-            <Route path="/group/:id/user/:userId" element={<UserGroupDetailScreen />} />
-            <Route path="/mygroups" element={<MyGroupsScreen />} />
-            <Route path="/group/:id/" element={<GroupDetailScreen />} />
-            <Route path="/mygroups/:id/expenses" element={<GroupExpensesScreen />} />
-            <Route path="/groups/create" element={<CreateGroupScreen />} />
-          </Routes>
-        </Container>
-      </main>
-      <Footer />
-    </Router>
+    <AuthProvider>
+
+      <Router>
+        <Header/>
+        <main className="py-3">
+          <Container>
+            <Routes>
+              <Route path="/" element={<BrowseGroupsScreen />} exact />
+              <Route path="/group/:id/user/:userId" element={<UserGroupDetailScreen />} />
+              <Route path="/mygroups" element={<MyGroupsScreen />} />
+              <Route path="/group/:id/" element={<GroupDetailScreen />} />
+              <Route path="/mygroups/:id/expenses" element={<GroupExpensesScreen />} />
+              <Route path="/groups/create" element={<CreateGroupScreen />} />
+              <Route path="group/:id/expense/create" element={<CreateExpenseScreen />} />
+              <Route path="/register" element={<SignupScreen />} />
+              <Route path="/login" element={<LoginScreen />} />
+            </Routes>
+          </Container>
+        </main>
+        <Footer />
+      </Router>
+
+    </AuthProvider>
+   
   );
 };
 
